@@ -6,7 +6,7 @@ app = FastAPI()
 
 def check_farsi_name(n):
     for char in n:
-        if '\u0600' <= char <= '\u06FF':
+        if '\u0600' <= char <= '\u06FF' or char == " ":
             continue 
         else:
             return False  
