@@ -1,11 +1,11 @@
 from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, ValidationError
+from pydantic import BaseModel
 import jdatetime
 import json
 
 
 class item(BaseModel):
-    studend_number: int
+    student_number: int
     name: str
     date: str
     letter_of_series_number: str
@@ -19,7 +19,7 @@ class item(BaseModel):
     landline_number: str | None = None
     name_college: str
     Field_of_Study:str
-    marital_statusn: str
+    marital_status: str
     code_melli:int
 
 
@@ -121,19 +121,19 @@ async def check(it: item):
         for error in e.errors():
             field = error["loc"][0]
             errors[field] = error["msg"]
-    if len(str(it.studend_number)) != 11:
+    if len(str(it.student_number)) != 11:
         errors["studend_number"] = "The number of digits entered is incorrect"
-    if not 402 >= split_number(it.studend_number) >= 400 :
+    if not 402 >= split_number(it.student_number) >= 400 :
         errors["split_number"] = "The year field is incorrect"
-    if Fixed_field(it.studend_number) != 114150:
+    if Fixed_field(it.student_number) != 114150:
         errors["student_number"] = "The fixed field is wrong"
-    if not 99 >= index(it.studend_number) >= 1:
+    if not 99 >= index(it.student_number) >= 1:
         errors["student_number"] = "The index part is wrong"
     if not check_farsi_name(it.name):
         errors["name"] = "All letters must be Farsi or Do not contain special symbols or numbers"
     if len(it.name) > 10:
         errors["name"] = "The maximum string length must be ten"
-    if not check_shamsi(it.date) == True:
+    if not check_shamsi(it.date):
         errors["date"] = "This date is incorrect"
     if len(it.letter_of_series_number) > 3 and check_farsi_name(it.letter_of_series_number) == False:
         errors["letter_of_series_number"] = "The letter part of the birth certificate was entered incorrectly"
@@ -141,7 +141,7 @@ async def check(it: item):
         errors["birth_certificate_seriesnumber"] = "The numeric part of the birth certificate series was entered incorrectly"
     if len(str(it.number_of_series_number)) > 6:
         errors["number_of_series_number"] = "The serial number of the birth certificate was entered incorrectly"
-    if not is_center(it.province) == True:
+    if not is_center(it.province):
         errors["center"] = "incorrect province" 
     if 100 < len(it.address):
         errors["address"] = "address incorrectly" 
@@ -157,9 +157,9 @@ async def check(it: item):
         errors["landline_number"] = "is landline number incorrect " 
     if not college_trust(it.name_college):
         errors["name_college"] = "name college is wrong"  
-    if not trust(it.Field_of_Study) == True:
+    if not trust(it.Field_of_Study):
         errors["field_study"] = "field of study is wrong" 
-    if not (it.marital_statusn == "married" or it.marital_statusn == "single"):
+    if not (it.marital_status == "متاهل" or it.marital_status == "مجرد"):
         errors["marital"] = "is marital status is wrong value"
     if not validate_national_id(it.code_melli):
         errors["code_melli"] = "code melli is incorrect"
