@@ -26,7 +26,7 @@ def index(n):
 def s_t(item : item):
     if len(str(item.studentNumber)) != 11:
         return "The number of digits entered is incorrect"
-    if not 402 >= split_number(item.studentNumber, 8) >= 400 :
+    if not 402 >= split_number(item.studentNumber) >= 400 :
         return "The year field is incorrect"
     if Fixed_field(item.studentNumber) != 114150:
         return "The fixed field is wrong"
